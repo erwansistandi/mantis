@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  mantisbt:
+    build: .
+    ports:
+      - "8989:80"
+    environment:
+      MANTISBT_DB_HOST: db
+      MANTISBT_DB_NAME: mantis
+      MANTISBT_DB_USER: mantis
+      MANTISBT_DB_PASSWORD: mantis
+    volumes:
+      - mantis_data:/var/www/html
+      - ./config/config_inc.php:/var/www/html/config/config_inc.php
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mantis
+      MYSQL_USER: mantis
+      MYSQL_PASSWORD: mantis
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  mantis_data:
+  db_data:
